@@ -74,6 +74,10 @@ app.use("/meeting", registerLimiter, meetingController);
 app.use("/houses", registerLimiter, housesController);
 app.use("/rent", registerLimiter, rentsController);
 
+app.get("/omda", (req, res) => {
+  res.send("Hello, this is the root route!");
+});
+
 // app.use("/uploads", express.static("uploads"));
 //Port
 const PORT = process.env.PORT;

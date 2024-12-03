@@ -4,8 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --timeout 10000",
-    "start": "node server.js"
+ 
+    "start": "node houseBook.js"
   },
   "author": "",
   "license": "ISC",
