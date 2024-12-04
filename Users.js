@@ -6,28 +6,25 @@ const USER = require("./UserModel");
 const authorizeRolesKey = require("./authorizeRoles");
  
 
+const { CpanelDb } = require('./CpanelDb');
+
 //@GET
-router.get("", authorizeRolesKey('admin','subAdmin'), async (req, res) => {
-  try {
-    const _user = USER.find().select("-password -__v")
-      .then((result) => {
+
+router.get("/", async (req, res) => {
+    try {
+        const [rows] = await CpanelDb.query("SELECT id, username, email, title, phone, role FROM users");
+
         return res.status(200).json({
-          message: "GET All Users Successfully",
-          data: result,
+            message: "GET All Users Successfully",
+            data: rows,
         });
-      })
-      .catch((error) => {
-        return res.status(400).json({
-          message: `GET All Users Has Failed : ${error} `,
+    } catch (error) {
+        console.error("Database query failed:", error);
+        return res.status(500).json({
+            message: "Internal Server Error: Unable to retrieve users.",
+            error: error.message,
         });
-      });
-    return await _user;
-  } catch (err) {
-    return res.status(400).json({
-      message: "Something went wrong when trying to GET Users",
-      error: err,
-    });
-  }
+    }
 });
 
 //@DELETE

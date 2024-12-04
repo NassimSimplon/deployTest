@@ -12,26 +12,7 @@ const rateLimit = require("express-rate-limit");
 // const { pool } = require("./SqlDb");
 // // Connect to the Sql database
 // pool();
-const cPanelDb = require('./CpanelDb');
-
-async function testConnection() {
-    try {
-        // Get a connection from the pool
-        const connection = await cPanelDb.getConnection();
-
-        // If we successfully got a connection, we can log a success message
-        console.log('Connected successfully to the database.',connection);
-
-        // Release the connection back to the pool
-        connection.release();
-    } catch (error) {
-        console.error('Database connection failed:', error);
-    }
-}
-
-// Call the testConnection function to test the connection
-
-testConnection();
+ 
 //Stream Images
 const setupFileStreaming = require("./setupFileStreaming"); // Adjust the path as needed
 
@@ -44,13 +25,13 @@ const rentsController = require("./Rents");
 
 //Cors Option
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN,
+  origin: 'https://intacthome.tn' || 'https://intacthome.tn:1' || process.env.CORS_ORIGIN ||  'http://localhost:3306' ,
 };
 
 ///@CORS
-app.use(cors(corsOptions));
+app.use(cors());
 // Middleware to parse URL-encoded data
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: true }));
 // Middleware to parse JSON bodies
 app.use(express.json());
 
@@ -69,7 +50,7 @@ setupFileStreaming(app);
 
 // Apply routes
 app.use("/auth", registerLimiter, authController);
-app.use("/user", registerLimiter, userController);
+app.use("/user", userController);
 app.use("/meeting", registerLimiter, meetingController);
 app.use("/houses", registerLimiter, housesController);
 app.use("/rent", registerLimiter, rentsController);
@@ -80,16 +61,22 @@ app.get("/omda", (req, res) => {
 
 // app.use("/uploads", express.static("uploads"));
 //Port
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 // Start the server
 const startServer = (port, app) => {
   const server = app.listen(port, () => {
-    console.log(`✅ Server is running at http://localhost:${port}`);
+    console.log(`✅ Server is running at http://localhost:${server.address().port}`);
   });
 
   server.on("error", (error) => {
-    console.error(`❌ Server failed to start: ${error.message}`);
+    if (error.code === "EADDRINUSE") {
+      console.error(`❌ Port ${port} is in use. Trying another port...`);
+      // Retry on a different port
+      startServer(0, app); // Passing 0 allows the OS to assign an available port
+    } else {
+      console.error(`❌ Server failed to start: ${error.message}`);
+    }
   });
 
   return server;
@@ -97,4 +84,3 @@ const startServer = (port, app) => {
 
 // Usage
 startServer(PORT, app);
-

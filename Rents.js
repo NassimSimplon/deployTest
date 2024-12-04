@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 //@Db
-const { db } = require('./SqlDb');
+  const { db } = require('./SqlDb');
 const verifyToken = require("./verifyToken");
 const { HTTP_STATUS } = require("./Helpers");
 const authorizeRoles = require("./authorizeRoles");
