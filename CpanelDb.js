@@ -1,16 +1,12 @@
-const mysql = require('mysql2/promise.js');
+const mysql = require('mysql2/promise');
 
 // Create a connection pool
 const cPanelDb = mysql.createPool({
-    host: 'localhost',
+    host: '10.10.10.10',
     user: 'yxdgljyk_omda',
     password: 'Imed.nass123456',
     database: 'yxdgljyk_houseBookDB',
     port: 3306,
-    // waitForConnections: true,
-    // connectionLimit: 10,
-    // queueLimit: 0,
-    // connectTimeout: 20000,
     ssl: {
         rejectUnauthorized: false // Set to true if you have a valid certificate
     }

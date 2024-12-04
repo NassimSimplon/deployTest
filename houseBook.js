@@ -59,6 +59,7 @@ app.get("/omda", (req, res) => {
   res.send("Hello, this is the root route!");
 });
 
+
 // app.use("/uploads", express.static("uploads"));
 //Port
 const PORT = process.env.PORT || 3000;
@@ -84,3 +85,7 @@ const startServer = (port, app) => {
 
 // Usage
 startServer(PORT, app);
+
+// ps -u $(whoami)
+// kill -9 <PID>
+

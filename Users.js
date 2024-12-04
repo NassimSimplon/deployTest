@@ -6,13 +6,12 @@ const USER = require("./UserModel");
 const authorizeRolesKey = require("./authorizeRoles");
  
 
-const { CpanelDb } = require('./CpanelDb');
+const cPanelDb = require('./CpanelDb'); // Correctly import cPanelDb
 
 //@GET
-
 router.get("/", async (req, res) => {
     try {
-        const [rows] = await CpanelDb.query("SELECT id, username, email, title, phone, role FROM users");
+        const [rows] = await cPanelDb.query("SELECT id, username, email, title, phone, role FROM users");
 
         return res.status(200).json({
             message: "GET All Users Successfully",
